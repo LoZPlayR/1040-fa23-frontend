@@ -38,6 +38,7 @@ export async function fetchy(
     headers: {
       "Content-Type": "application/json",
       credentials: "same-origin",
+      //Authorization: "Client-ID 4b2e6fd234aa451",
     },
   };
 
