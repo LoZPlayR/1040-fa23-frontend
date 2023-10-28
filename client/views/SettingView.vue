@@ -28,8 +28,7 @@ async function deleteFeed_() {
   <main class="column">
     <h1>Settings for {{ currentUsername }}</h1>
     <button @click="logout">Logout</button>
-    <p>test</p>
-    <button class="button-error pure-button" @click="delete_">Delete User</button>
+    <button id="delete" @click="delete_">Delete User</button>
     <UpdateUserForm />
     <button @click="deleteFeed_">Reset Feed</button>
     <PostListComponent />
@@ -43,5 +42,21 @@ button {
   border: 5px white solid;
   margin-left: 15px;
   text-align: center;
+}
+button:hover {
+  background-color: lightgray;
+  border-color: lightgray;
+}
+#delete {
+  background-color: rgb(253, 69, 69);
+  font-weight: bold;
+  border: 5px rgb(253, 69, 69) solid;
+  text-align: center;
+  color: white;
+  border-radius: 0;
+}
+#delete:hover {
+  background-color: red;
+  border-color: red;
 }
 </style>

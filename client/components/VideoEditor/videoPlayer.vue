@@ -4,7 +4,7 @@ import { useToastStore } from "@/stores/toast";
 
 const videoPlayer = ref();
 const vSlider = ref();
-const props = defineProps(["videoSource"]);
+defineProps(["videoSource"]);
 const emit = defineEmits(["trash", "post"]);
 
 const currCaption = ref("");
@@ -14,6 +14,7 @@ let prevVolume = 1;
 const isPlaying = ref(true);
 const isMuted = ref(false);
 const addCaption = ref(false);
+const vidVol = ref(100);
 
 function playPauseVideo() {
   if (isPlaying.value) {
@@ -36,13 +37,6 @@ function muteVideo() {
   }
 }
 
-function setVol(e: Event) {
-  isMuted.value = false;
-  if (e.target === null) return;
-  const et: HTMLInputElement = e.target;
-  videoPlayer.value.volume = et.value / 100;
-}
-
 function notImplemented() {
   useToastStore().showToast({ message: "This feature is not implemented", style: "error" });
 }
@@ -62,12 +56,19 @@ function cancelCaption() {
       <img @click="playPauseVideo" src="@/assets/images/play.svg" width="50" v-else />
       <img @click="muteVideo" src="@/assets/images/soundOff.svg" width="60" v-if="isMuted" />
       <img @click="muteVideo" src="@/assets/images/soundOn.svg" width="60" v-else />
-      <input type="range" min="0" max="100" value="100" ref="vSlider" @input="setVol" id="volumeSlider" />
+      <input type="range" min="0" max="100" ref="vSlider" v-model="vidVol" id="volumeSlider" />
     </div>
     <div id="videoSection">
-      <video :key="videoSource" id="my-player" ref="videoPlayer" loop autoplay @playing="() => console.log('playing')" @mounted="() => console.log('mounted')">
+      <video :key="videoSource" id="my-player" ref="videoPlayer" loop autoplay :volume="vidVol / 100">
         <source :src="videoSource" />
       </video>
+      <div class="addCaption" :hidden="!addCaption">
+        <button @click="cancelCaption">Nvm</button>
+        <h3>Add Caption</h3>
+        <textarea v-model="currCaption" maxlength="140" style="height: 25vh; resize: none"></textarea>
+        <p style="margin: 0">Chars Remaining: {{ 140 - currCaptionLength }}</p>
+        <button @click="emit('post', currCaption)" :hidden="currCaptionLength === 0">SUBMIT</button>
+      </div>
     </div>
     <div id="editorOptions">
       <img src="@/assets/images/Send.png" @click="handleCaption" />
@@ -76,13 +77,6 @@ function cancelCaption() {
       <img src="@/assets/images/Trash.png" @click="emit('trash')" />
     </div>
   </div>
-  <div class="addCaption" :hidden="!addCaption">
-    <button @click="cancelCaption">Nvm</button>
-    <h3>Add Caption</h3>
-    <textarea v-model="currCaption" maxlength="140" style="height: 25vh; resize: none"></textarea>
-    <p style="margin: 0">Chars Remaining: {{ 140 - currCaptionLength }}</p>
-    <button @click="emit('post', currCaption)" :hidden="currCaptionLength === 0">SUBMIT</button>
-  </div>
 </template>
 <style>
 #videoEditorDiv {
@@ -90,21 +84,25 @@ function cancelCaption() {
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   margin-left: auto;
   margin-right: auto;
   max-height: 80vh;
   max-width: 50vw;
 }
-.videoSection {
+#videoSection {
   max-height: 80vh;
   aspect-ratio: 9 / 16;
   background: black;
   display: inline-block;
   margin: 0;
+  border: 10px black solid;
+  border-radius: 25px;
 }
 #videoSection video {
   max-width: 100%;
   max-height: 80vh;
+  border-radius: 25px;
 }
 #editor-options * {
   text-align: center;
