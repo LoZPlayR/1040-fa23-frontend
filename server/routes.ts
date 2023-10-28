@@ -168,6 +168,12 @@ class Routes {
     return nextContent;
   }
 
+  @Router.patch("/feed/reset")
+  async resetFeed(session: WebSessionDoc) {
+    const owner = WebSession.getUser(session);
+    return await Feed.reset(owner);
+  }
+
   @Router.patch("/feed/queue/:numItems")
   async expandFeed(session: WebSessionDoc, numItems: string) {
     numItems = numItems.slice(1);
@@ -205,6 +211,17 @@ class Routes {
     return { msg: "Successfully reset stats! " };
   }
 
+  @Router.patch("/feed/pause")
+  async pauseTime(session: WebSessionDoc) {
+    const owner = WebSession.getUser(session);
+    return await Timer.pauseTimeByOwner(owner);
+  }
+
+  @Router.patch("/feed/unpause")
+  async unpauseTime(session: WebSessionDoc) {
+    const owner = WebSession.getUser(session);
+    return await Timer.playTimeByOwner(owner);
+  }
   // Delete Feed with User
   // @Router.delete("/feed/owner:")
   // async deleteFeed(owner: ObjectId) {
@@ -218,21 +235,24 @@ class Routes {
   //   return nextContent;
   // }
 
-  @Router.post("/disable/:_id")
-  async disableObject(_id: ObjectId) {
-    const locked = await Disable.lock(_id);
+  @Router.post("/disable")
+  async disableObject(session: WebSessionDoc) {
+    const owner = WebSession.getUser(session);
+    const locked = await Disable.lock(owner);
     return locked;
   }
 
-  @Router.delete("/disable/:_id")
-  async enableObject(_id: ObjectId) {
-    const unlocked = await Disable.unlock(_id);
+  @Router.delete("/disable")
+  async enableObject(session: WebSessionDoc) {
+    const owner = WebSession.getUser(session);
+    const unlocked = await Disable.unlock(owner);
     return unlocked;
   }
 
-  @Router.get("/disable/:_id")
-  async checkObject(_id: ObjectId) {
-    const lockState = await Disable.isLocked(_id);
+  @Router.get("/disable")
+  async checkObject(session: WebSessionDoc) {
+    const owner = WebSession.getUser(session);
+    const lockState = await Disable.isLocked(owner);
     return lockState;
   }
 }

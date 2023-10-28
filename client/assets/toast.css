@@ -16,4 +16,5 @@
 }
 .success {
   background-color: #40c057;
+  display: none;
 }

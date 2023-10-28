@@ -97,4 +97,9 @@ export default class FeedConcept {
 
     return { msg: `Feed has ${feed.available.length} items left!`, count: feed.available.length };
   }
+
+  async reset(owner: ObjectId) {
+    await this.feeds.updateOne({ owner }, { seen: [] });
+    return { msg: "Feed reset successfully!" };
+  }
 }

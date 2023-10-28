@@ -5,10 +5,10 @@ import { fetchy } from "../../utils/fetchy";
 const content = ref("");
 const emit = defineEmits(["refreshPosts"]);
 
-const createPost = async (content: string) => {
+const createPost = async (message: string) => {
   try {
     await fetchy("/api/posts", "POST", {
-      body: { content },
+      body: { message, content: "NzVCPrG" },
     });
   } catch (_) {
     return;

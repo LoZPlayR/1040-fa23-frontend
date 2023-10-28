@@ -6,6 +6,7 @@ import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import NotFoundView from "../views/NotFoundView.vue";
 import SettingView from "../views/SettingView.vue";
+import VideoEditorView from "../views/VideoEditorView.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -14,11 +15,18 @@ const router = createRouter({
       path: "/",
       name: "Home",
       component: HomeView,
+      meta: { requiresAuth: true },
     },
     {
-      path: "/setting",
-      name: "Settings",
+      path: "/dashboard",
+      name: "Dashboard",
       component: SettingView,
+      meta: { requiresAuth: true },
+    },
+    {
+      path: "/jam",
+      name: "VideoEditor",
+      component: VideoEditorView,
       meta: { requiresAuth: true },
     },
     {
