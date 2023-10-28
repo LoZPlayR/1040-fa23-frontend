@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, watch, on } from "vue";
+import { ref, computed, watch } from "vue";
 import { storage } from "@/utils/firebase";
 import { ref as fref, getDownloadURL } from "firebase/storage";
 
